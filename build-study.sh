@@ -103,10 +103,13 @@ function build_pepper {
   logfile="tmp.log"
   match="ddp startup complete"
   
+  # run in the background and output logs into a file
+  # so we can listen logs for specific string to know process has finished and stop it
   $RUN_PEPPER_SERVER_CMD > "$logfile" 2>&1 &
 
   pid=$!
 
+  # listen for specific string in logs
   while sleep 10
   do
     if fgrep --quiet "$match" "$logfile"

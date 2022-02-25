@@ -33,5 +33,9 @@ case $STUDY_KEY in
    export AUTH0_DOMAIN="https://ddp-dev.auth0.com/"
    ;;
 
+   'atcp')
+   export AUTH0_DOMAIN="https://ddp-dev.auth0.com/"
+   ;;
+
    *);;
 esac
