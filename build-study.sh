@@ -72,6 +72,13 @@ function main {
         run_pepper
         break
         ;;
+      --all-no-build)
+        clean_db
+        run_pepper_migration
+        run_study
+        run_pepper
+        break
+        ;;
       --help|-h)
         print_usage
         exit 0
@@ -99,6 +106,13 @@ function build_pepper {
   cd $PEPPER_APIS_DIR
 
   mvn -DskipTests clean install -pl dss-server -am
+
+  run_pepper_migration
+}
+
+
+function run_pepper_migration {
+  cd $PEPPER_APIS_DIR
 
   logfile="tmp.log"
   match="ddp startup complete"
@@ -181,8 +195,9 @@ USAGE:
   $NAME <study_name> <substitutions_config_file> <OPTION>
 
 OPTIONS:
-  --all-no-db                     used when running build process for the very first time (does pepper build, study build, and pepper startup)
   --all                           does same stuff as '--all' but plus clearing database before running any build process
+  --all-no-db                     used when running build process for the very first time (does pepper build, study build, and pepper startup)
+  --all-no-build                  used when you need to run whole flow but maven re-builds are not necessary
   --build-pepper                  run just pepper build process
   --build-study                   run just study build process for the given study
   --run-pepper                    only start up pepper server
