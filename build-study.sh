@@ -139,7 +139,7 @@ function run_pepper_init {
   pid=$!
 
   # listen for specific string in logs
-  while sleep 10
+  while sleep 3
   do
     if fgrep --quiet "$match" "$logfile"
     then
