@@ -10,13 +10,13 @@ function main {
 
   if [[ -z $STUDY ]]; then
     echo ""
-    echo "Error: study name argument is required" | GREP_COLOR='01;31' grep . --color=always
+    echo "Error: study name argument is required" | color_red
     exit 1
   fi
 
   if [[ -z $SUBS || ($SUBS != "subs.conf" && $SUBS != "substitutions.conf") ]]; then
     echo ""
-    echo "Error: substitutions file name argument is required (\`subs.conf\` or \`substitutions.conf\`)" | GREP_COLOR='01;31' grep . --color=always
+    echo "Error: substitutions file name argument is required (\`subs.conf\` or \`substitutions.conf\`)" | color_red
     exit 1
   fi
 
@@ -74,7 +74,9 @@ function main {
         ;;
       --all-no-build)
         clean_db
-        run_pepper_migration
+        render_pepper_config
+        run_pepper_init
+        render_study_config
         run_study
         run_pepper
         break
@@ -107,11 +109,24 @@ function build_pepper {
 
   mvn -DskipTests clean install -pl dss-server -am
 
-  run_pepper_migration
+  run_pepper_init
 }
 
 
-function run_pepper_migration {
+function build_study {
+  render_study_config
+
+  cd $PEPPER_APIS_DIR
+
+  mvn -DskipTests clean install -pl studybuilder-cli -am
+
+  cd $STUDY_BUILDER_CONFIGS_DIR
+
+  $RUN_STUDY_BUILDER_CMD | prefix_logs 'Study Builder'
+}
+
+
+function run_pepper_init {
   cd $PEPPER_APIS_DIR
 
   logfile="tmp.log"
@@ -134,19 +149,6 @@ function run_pepper_migration {
     else cat $logfile
     fi
   done
-}
-
-
-function build_study {
-  render_study_config
-
-  cd $PEPPER_APIS_DIR
-
-  mvn -DskipTests clean install -pl studybuilder-cli -am
-
-  cd $STUDY_BUILDER_CONFIGS_DIR
-
-  $RUN_STUDY_BUILDER_CMD | prefix_logs 'Study Builder'
 }
 
 
@@ -184,6 +186,10 @@ function render_study_config {
 
 function prefix_logs {
   sed -e "s/^/[${1}] /;"
+}
+
+function color_red {
+  GREP_COLOR='01;31' grep . --color=always
 }
 
 
