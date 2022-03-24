@@ -9,7 +9,7 @@ FILE_TO_UPDATE="${STUDY_BUILDER_CONFIGS_DIR}/output-config/application.conf"
 sed -i "s|\"dbUrl\":.*|\"dbUrl\": \"${DB_URL}\",|g" ${FILE_TO_UPDATE}
 
 
-if [[ $STUDY_KEY == 'singular' ]]; then
+if [[ $STUDY_KEY == 'singular' || $STUDY_KEY == 'basil' ]]; then
     sed -i "s|\"defaultTimezone\":\(.*\)|\"defaultTimezone\":\1\n\
     \"fileUploads\": {\n\
         \"uploadsBucket\": \"ddp-dev-file-uploads\",\n\
@@ -39,10 +39,19 @@ fi
 
 
 # update vars.conf
+if [[ $STUDY_KEY == 'basil' ]]; then
+    mv "${STUDY_BUILDER_CONFIGS_DIR}/output-config/basil-vars.conf" "${STUDY_BUILDER_CONFIGS_DIR}/output-config/vars.conf"
+fi
+
 FILE_TO_UPDATE="${STUDY_BUILDER_CONFIGS_DIR}/output-config/vars.conf"
 
-sed -i "s|\"clientId\":.*|\"clientId\": \"${CLIENT_ID}\",|g" ${FILE_TO_UPDATE}
-sed -i "s|\"clientSecret\":.*|\"clientSecret\": \"${CLIENT_SECRET}\",|g" ${FILE_TO_UPDATE}
+if [[ $STUDY_KEY == 'basil' ]]; then
+    sed -i "s|\"appClientId\":.*|\"appClientId\": \"${CLIENT_ID}\",|g" ${FILE_TO_UPDATE}
+    sed -i "s|\"appClientSecret\":.*|\"appClientSecret\": \"${CLIENT_SECRET}\",|g" ${FILE_TO_UPDATE}
+else
+    sed -i "s|\"clientId\":.*|\"clientId\": \"${CLIENT_ID}\",|g" ${FILE_TO_UPDATE}
+    sed -i "s|\"clientSecret\":.*|\"clientSecret\": \"${CLIENT_SECRET}\",|g" ${FILE_TO_UPDATE}
+fi
 
 if [[ -n $AUTH0_DOMAIN ]]; then
     sed -i "s|\"domain\":.*|\"domain\": \"${AUTH0_DOMAIN}\",|g" ${FILE_TO_UPDATE}

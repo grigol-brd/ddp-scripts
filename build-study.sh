@@ -5,72 +5,91 @@ set -e
 
 function main {
   NAME=$0
-  STUDY=$1; shift
-  SUBS=$1; shift
+  STUDY=$1;
+  SUBS=$2;
 
   if [[ -z $STUDY ]]; then
-    echo ""
     echo "Error: study name argument is required" | color_red
     exit 1
   fi
 
   if [[ -z $SUBS || ($SUBS != "subs.conf" && $SUBS != "substitutions.conf") ]]; then
-    echo ""
     echo "Error: substitutions file name argument is required (\`subs.conf\` or \`substitutions.conf\`)" | color_red
     exit 1
   fi
 
-  . ./env.sh $STUDY
+  shift; shift # remove positional arguments
+
+  if [[ $# == 0 ]]; then
+    echo 'At least one option argument is required. Use -h to see usage' | color_red
+  fi
+
+
+  # load env variables
+  source ./env.sh $STUDY
 
 
   RUN_PEPPER_SERVER_CMD="java -Dconfig.file=./output-config/application.conf -jar ./dss-server/target/DataDonationPlatform.jar"
 
   RUN_STUDY_BUILDER_CMD="java -Dconfig.file=./output-config/application.conf -jar ${STUDY_BUILDER_CLI_DIR}/target/StudyBuilder.jar --vars ./output-config/vars.conf ./studies/${STUDY}/study.conf --substitutions ./studies/${STUDY}/${SUBS}"
+  if [[ $STUDY_KEY == 'basil' ]]; then
+    RUN_STUDY_BUILDER_CMD="${RUN_STUDY_BUILDER_CMD} --process-translations PROCESS_IGNORE_TEMPLATES_WITH_TRANSLATIONS"
+  fi
 
+  RUN_STUDY_BUILDER_INVALIDATE_CMD="${RUN_STUDY_BUILDER_CMD} --invalidate"
   
 
-  while true; do
+  while [[ $# -gt 0 ]]; do
     case "$1" in
       --build-pepper)
         build_pepper
-        break
+        shift
         ;;
-      --run-pepper)
+      -rp|--run-pepper)
         run_pepper
-        break
+        shift
         ;;
       --render-pepper)
         render_pepper_config
-        break
+        shift
         ;;
       --build-study)
         build_study
-        break
+        shift
         ;;
-      --run-study)
+      -rs|--run-study)
         run_study
-        break
+        shift
         ;;
       --render-study)
         render_study_config
-        break
+        shift
+        ;;
+      -i|--invalidate)
+        invalidate_study
+        shift
+        ;;
+      -ra|--render-all)
+        render_study_config
+        render_pepper_config
+        shift
         ;;
       --clean-db)
         clean_db
-        break
+        shift
         ;;
       --all)
         clean_db
         build_pepper
         build_study
         run_pepper
-        break
+        shift
         ;;
       --all-no-db)
         build_pepper
         build_study
         run_pepper
-        break
+        shift
         ;;
       --all-no-build)
         clean_db
@@ -79,15 +98,21 @@ function main {
         render_study_config
         run_study
         run_pepper
-        break
+        shift
         ;;
-      --help|-h)
+      -q|--all-quick)
+        invalidate_study
+        run_study
+        run_pepper
+        shift
+        ;;
+      -h|--help)
         print_usage
         exit 0
         ;;
       *)
-        print_usage
-        exit 0
+        unknown_option $1
+        shift
         ;;
     esac
   done
@@ -159,6 +184,13 @@ function run_pepper {
 }
 
 
+function invalidate_study {
+  cd $STUDY_BUILDER_CONFIGS_DIR
+
+  $RUN_STUDY_BUILDER_INVALIDATE_CMD
+}
+
+
 function run_study {
   cd $STUDY_BUILDER_CONFIGS_DIR
 
@@ -188,8 +220,15 @@ function prefix_logs {
   sed -e "s/^/[${1}] /;"
 }
 
+
 function color_red {
   GREP_COLOR='01;31' grep . --color=always
+}
+
+
+function unknown_option {
+  echo "Unknown option '$1', skipping it" | color_red
+  echo "               ^^^^^" | color_red
 }
 
 

@@ -27,15 +27,4 @@ export STUDY_BUILDER_CLI_DIR="${PEPPER_APIS_DIR}/studybuilder-cli"
 export CLIENT_ID="D1TNXhZChtMSUTGVFs1C2ow2kFGfMJrL"
 export CLIENT_SECRET="lP34E6Br7x-CAt3D8HcVKRl4kvR6yn5xgnrByd0TUKf5jaltFkDSMyr_rZF5RXpr"
 
-
-case $STUDY_KEY in
-   'singular')
-   export AUTH0_DOMAIN="https://ddp-dev.auth0.com/"
-   ;;
-
-   'atcp')
-   export AUTH0_DOMAIN="https://ddp-dev.auth0.com/"
-   ;;
-
-   *);;
-esac
+export AUTH0_DOMAIN="https://ddp-dev.auth0.com/"
