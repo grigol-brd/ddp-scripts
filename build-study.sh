@@ -53,6 +53,10 @@ function main {
         run_pepper
         shift
         ;;
+      -ip|--init-pepper)
+        init_pepper
+        shift
+        ;;
       --render-pepper)
         render_pepper_config
         shift
