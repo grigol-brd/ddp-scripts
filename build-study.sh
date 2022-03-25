@@ -45,6 +45,10 @@ function main {
         build_pepper
         shift
         ;;
+      -cp|--compile-pepper)
+        compile_pepper
+        shift
+        ;;
       -rp|--run-pepper)
         run_pepper
         shift
@@ -55,6 +59,10 @@ function main {
         ;;
       --build-study)
         build_study
+        shift
+        ;;
+      -cs|--compile-study)
+        compile_study
         shift
         ;;
       -rs|--run-study)
@@ -94,7 +102,7 @@ function main {
       --all-no-build)
         clean_db
         render_pepper_config
-        run_pepper_init
+        init_pepper
         render_study_config
         run_study
         run_pepper
@@ -129,29 +137,33 @@ function clean_db {
 
 function build_pepper {
   render_pepper_config
-
-  cd $PEPPER_APIS_DIR
-
-  mvn -DskipTests clean install -pl dss-server -am
-
-  run_pepper_init
+  compile_pepper
+  init_pepper
 }
 
 
 function build_study {
   render_study_config
-
-  cd $PEPPER_APIS_DIR
-
-  mvn -DskipTests clean install -pl studybuilder-cli -am
-
-  cd $STUDY_BUILDER_CONFIGS_DIR
-
-  $RUN_STUDY_BUILDER_CMD | prefix_logs 'Study Builder'
+  compile_study
+  run_study
 }
 
 
-function run_pepper_init {
+function compile_pepper {
+  cd $PEPPER_APIS_DIR
+
+  mvn -DskipTests clean install -pl dss-server -am
+}
+
+
+function compile_study {
+  cd $PEPPER_APIS_DIR
+
+  mvn -DskipTests clean install -pl studybuilder-cli -am
+}
+
+
+function init_pepper {
   cd $PEPPER_APIS_DIR
 
   logfile="tmp.log"
