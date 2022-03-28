@@ -86,7 +86,7 @@ function main {
         render_pepper_config
         shift
         ;;
-      --clean-db)
+      -cd|--clean-db)
         clean_db
         shift
         ;;
