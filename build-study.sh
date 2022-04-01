@@ -4,6 +4,9 @@
 set -e
 
 function main {
+  # colors
+  RED=31; GREEN=32;
+
   NAME=$0
   STUDY=$1;
   SUBS=$2;
@@ -196,7 +199,7 @@ function init_pepper {
 function run_pepper {
   cd $PEPPER_APIS_DIR
 
-  $RUN_PEPPER_SERVER_CMD | prefix_logs 'Pepper'
+  $RUN_PEPPER_SERVER_CMD | prefix_logs 'Pepper' $GREEN
 }
 
 
@@ -233,7 +236,7 @@ function render_study_config {
 
 
 function prefix_logs {
-  sed -e "s/^/[${1}] /;"
+  sed -e "s/^/[${1}] \x1b[${2:-0}m/;"
 }
 
 
