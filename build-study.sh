@@ -169,7 +169,7 @@ function compile_study {
   mvn -DskipTests clean install -pl studybuilder-cli -am
 }
 
-
+# when running pepper for the first time it needs to do db migration before we run study builder
 function init_pepper {
   cd $PEPPER_APIS_DIR
 
@@ -256,20 +256,45 @@ function print_usage {
 A script to help automate a few different steps of the build process.
 
 USAGE:
-  $NAME <study_name> <substitutions_config_file> <OPTION>
+  $NAME <study_name> <substitutions_config_file> <OPTION> [OPTION] ...
+
+  $NAME singular substitutions.conf --run-pepper
+
+  NOTE: Order of OPTIONs matter, necessary steps will be run in the same order as options were provided
 
 OPTIONS:
-  --all                           does same stuff as '--all' but plus clearing database before running any build process
-  --all-no-db                     used when running build process for the very first time (does pepper build, study build, and pepper startup)
-  --all-no-build                  used when you need to run whole flow but maven re-builds are not necessary
-  --build-pepper                  run just pepper build process
-  --build-study                   run just study build process for the given study
-  --run-pepper                    only start up pepper server
-  --run-study                     only run study builder
-  --render-pepper                 only renders configuration for pepper server
-  --render-study                  only renders configuration for study builder
-  --clean-db                      cleans database
+  --all
+    clear the whole db, render required configs, compile and run pepper server and study builder
 
+  --all-no-db
+    same steps as '--all' but skips database clearing
+
+  --all-no-build
+    same steps as '--all' but skips maven compilations and uses previously built .jar files. Useful when there are no changes in java code
+
+  --all-quick
+    invalidate given study, run pepper and study server. Useful when there's been only .conf file changes and need to see reflect quick
+
+  --build-pepper
+    compile and run pepper
+
+  --build-study
+    compile and run study builder
+
+  --run-pepper
+    start up pepper server
+
+  --run-study
+    run study builder
+
+  --render-pepper
+    render configuration for pepper server
+
+  --render-study
+    render configuration for study builder
+
+  --clean-db
+    clear the whole db
 EOM
 }
 
