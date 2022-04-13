@@ -44,6 +44,10 @@ function main {
 
   while [[ $# -gt 0 ]]; do
     case "$1" in
+      -h|--help)
+        print_usage
+        exit 0
+        ;;
       --build-pepper)
         build_pepper
         shift
@@ -121,9 +125,13 @@ function main {
         run_pepper
         shift
         ;;
-      -h|--help)
-        print_usage
-        exit 0
+      --build-osteo-old)
+        build_osteo_old
+        shift
+        ;;
+      --patch-osteo-v2)
+        run_patch_osteo_v2
+        shift
         ;;
       *)
         unknown_option $1
@@ -136,7 +144,9 @@ function main {
 
 
 function clean_db {
-  $SCRIPTS_DIR/empty-database.sh
+  cd $SCRIPTS_DIR
+
+  ./empty-database.sh || true # '||true' ignores error's if command fails
 
   echo 'database clearing complete'
 }
@@ -232,6 +242,39 @@ function render_study_config {
   ./render.sh v1 dev $STUDY
 
   $SCRIPTS_DIR/configure-study-builder.sh
+}
+
+
+function build_osteo_old {
+  OSTEO_OLD_BRANCH='osteo-old'
+
+  cd $STUDY_SERVER_DIR
+
+  CURRENT_BRANCH=$(git branch --show-current)
+
+  git checkout $OSTEO_OLD_BRANCH
+
+  clean_db
+  build_pepper
+  build_study
+
+  git checkout ${CURRENT_BRANCH:-'develop'}
+
+  run_pepper
+}
+
+
+function run_patch_osteo_v2 {
+  compile_study
+
+  cd $STUDY_BUILDER_CONFIGS_DIR
+
+  TASK='OsteoV2Updates'
+  RUN_PATCH_CMD="${RUN_STUDY_BUILDER_CMD} --run-task ${TASK}"
+
+  $RUN_PATCH_CMD | prefix_logs 'Study Builder Patching'
+
+  run_pepper
 }
 
 
