@@ -4,7 +4,7 @@
 set -e
 
 STUDY=$1
-STUDY_GUID=$2
+STUDY_GUID=${2:-$STUDY}
 
 . ./env.sh $STUDY
 

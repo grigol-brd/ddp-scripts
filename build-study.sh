@@ -4,35 +4,37 @@
 set -e
 
 function main {
+  UNUSED_OPTIONS=()
+
   # colors
-  RED=31; GREEN=32;
+  RED=31; GREEN=32; YELLOW=33;
 
   NAME=$0
   STUDY=$1;
   SUBS=$2;
 
   if [[ -z $STUDY ]]; then
-    echo "Error: study name argument is required" | color_red
+    echo "Error: study name argument is required" | output_color $RED
     exit 1
   fi
 
   if [[ -z $SUBS || ($SUBS != "subs.conf" && $SUBS != "substitutions.conf") ]]; then
-    echo "Error: substitutions file name argument is required (\`subs.conf\` or \`substitutions.conf\`)" | color_red
+    echo "Error: substitutions file name argument is required (\`subs.conf\` or \`substitutions.conf\`)" | output_color $RED
     exit 1
   fi
 
   shift; shift # remove positional arguments
 
   if [[ $# == 0 ]]; then
-    echo 'At least one option argument is required. Use -h to see usage' | color_red
+    echo 'At least one option argument is required. Use -h to see usage' | output_color $RED
   fi
 
 
   # load env variables
   source ./env.sh $STUDY
 
-
-  RUN_PEPPER_SERVER_CMD="java -Dconfig.file=./output-config/application.conf -jar ./dss-server/target/DataDonationPlatform.jar"
+  PEPPER_JAR_FILE_PARTH='dss-server/target/DataDonationPlatform.jar'
+  RUN_PEPPER_SERVER_CMD="java -Dconfig.file=./output-config/application.conf -jar ${PEPPER_JAR_FILE_PARTH}"
 
   RUN_STUDY_BUILDER_CMD="java -Dconfig.file=./output-config/application.conf -jar ${STUDY_BUILDER_CLI_DIR}/target/StudyBuilder.jar --vars ./output-config/vars.conf ./studies/${STUDY}/study.conf --substitutions ./studies/${STUDY}/${SUBS}"
   if [[ $STUDY_KEY == 'basil' ]]; then
@@ -40,7 +42,6 @@ function main {
   fi
 
   RUN_STUDY_BUILDER_INVALIDATE_CMD="${RUN_STUDY_BUILDER_CMD} --invalidate"
-  
 
   while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -50,65 +51,51 @@ function main {
         ;;
       --build-pepper)
         build_pepper
-        shift
         ;;
       -cp|--compile-pepper)
         compile_pepper
-        shift
         ;;
       -rp|--run-pepper)
         run_pepper
-        shift
         ;;
       -ip|--init-pepper)
         init_pepper
-        shift
         ;;
       --render-pepper)
         render_pepper_config
-        shift
         ;;
       --build-study)
         build_study
-        shift
         ;;
       -cs|--compile-study)
         compile_study
-        shift
         ;;
       -rs|--run-study)
         run_study
-        shift
         ;;
       --render-study)
         render_study_config
-        shift
         ;;
       -i|--invalidate)
         invalidate_study
-        shift
         ;;
       -ra|--render-all)
         render_study_config
         render_pepper_config
-        shift
         ;;
       -cd|--clean-db)
         clean_db
-        shift
         ;;
       --all)
         clean_db
         build_pepper
         build_study
         run_pepper
-        shift
         ;;
       --all-no-db)
         build_pepper
         build_study
         run_pepper
-        shift
         ;;
       --all-no-build)
         clean_db
@@ -117,27 +104,24 @@ function main {
         render_study_config
         run_study
         run_pepper
-        shift
         ;;
       -q|--all-quick)
         invalidate_study
         run_study
         run_pepper
-        shift
         ;;
       --build-osteo-old)
         build_osteo_old
-        shift
         ;;
       --patch-osteo-v2)
         run_patch_osteo_v2
-        shift
         ;;
       *)
-        unknown_option $1
-        shift
+        unknown_option_warn $1
+        UNUSED_OPTIONS+=("$1")
         ;;
     esac
+    shift
   done
 }
 
@@ -246,19 +230,16 @@ function render_study_config {
 
 
 function build_osteo_old {
-  OSTEO_OLD_BRANCH='osteo-old'
-
-  cd $STUDY_SERVER_DIR
-
-  CURRENT_BRANCH=$(git branch --show-current)
-
-  git checkout $OSTEO_OLD_BRANCH
-
   clean_db
-  build_pepper
-  build_study
 
-  git checkout ${CURRENT_BRANCH:-'develop'}
+  if [[ ! -f "${PEPPER_APIS_DIR}/${PEPPER_JAR_FILE_PARTH}" || "${UNUSED_OPTIONS[@]}" != *'--skip-pepper-compile'* ]]; then
+    build_pepper
+  else
+    render_pepper_config
+    init_pepper
+  fi
+
+  build_study
 
   run_pepper
 }
@@ -283,14 +264,13 @@ function prefix_logs {
 }
 
 
-function color_red {
-  GREP_COLOR='01;31' grep . --color=always
+function output_color {
+  GREP_COLOR="01;${1}" grep . --color=always
 }
 
 
-function unknown_option {
-  echo "Unknown option '$1', skipping it" | color_red
-  echo "               ^^^^^" | color_red
+function unknown_option_warn {
+  echo "Unknown option '$1'" | output_color $YELLOW
 }
 
 
