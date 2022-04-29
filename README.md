@@ -1,48 +1,70 @@
-სინგულარის გასაშვებად  
-ბექი (ყველა ეშვება სკრიპტების ფოლდერიდან):  
-`./build-study.sh singular substitutions.conf --all`  
-ან ნაბიჯ-ნაბიჯ თუ გინდათ:  
-`./build-study.sh singular substitutions.conf --clean-db`  
-`./build-study.sh singular substitutions.conf --build-pepper`
-`./build-study.sh singular substitutions.conf --build-study`  
-`./build-study.sh singular substitutions.conf --run-pepper`
+## Setup
 
-<br>
-
-ფრონტი:
-
-`./render-client-config.sh singular singular` (ესეც სკრიპტების ფოლდერიდან)  
-`ng serve ddp-singular` (ანგულარის ddp-workspace ფოლდერიდან)
-
-<br>
-
-ეს რა სთადიებიც გვაქ ყველას key და id ები (უახლესი ვერსია შეგიძლიათ ნახოთ ანგულარის რეპოში `ddp-angular\.circleci\config.yml` ფაილში)
+To setup tokens and log into vault run below command from `scripts-ddp` folder.  
+**Ask teammates for the tokens**
 
 ```
-  study_keys:
-    basil dsm-ui osteo brain angio mbc testboston mpc prion atcp rarex rgp esc cgc circadia pancan singular brugada
-
-  study_guids:
-    basil NA CMI-OSTEO cmi-brain ANGIO cmi-mbc testboston cmi-mpc PRION atcp rarex RGP cmi-esc cgc circadia cmi-pancan singular brugada
+./setup.sh -c <circle_ci_token> -g <github_personal_access_token>
 ```
 
-<br>
+## Frontend
 
----
+### Startup
 
-<br>
+**Find study [keys here](https://github.com/broadinstitute/ddp-angular/blob/develop/.circleci/config.yml#L14) and [guids here](https://github.com/broadinstitute/ddp-angular/blob/develop/.circleci/config.yml#L16)**
 
-ვინც პულ რექვესთს `ddp-study-server` რეპოზიტორიაში გააკეთებთ, გამერჯვის უფლება რო მოგცეთ უნდა გაუშვათ ავტოტესტები თქვენი ბრენჩისთვის.  
-ჯერ ეს გაუშვით სადმე ტერმინალში:  
-`echo 0eea16a9366eb4a199c6cc57e2e0db8a6d339f2a >> ~/.circleci-token` (ეს თუ არ გიქნიათ ერთხელ გაუშვით და მერე აღარ დაგჭირდებათ)
+Generate frontend study config. Run this from `scripts-ddp` folder
 
-და ტესტინგი რო დაიწყოს ეს:  
-`./run_ci_tests.sh <your_branch_name> ` (`ddp-study-server\pepper-apis\scripts` დირექტორიიდან)
-<br>
+```
+./render-client-config.sh <study_key> <study_guid>
+```
 
----
+Install required dependencies. Run below command from `ddp-angular/ddp-workspace` folder
 
-<br>
+```
+npm install
+```
 
-`build-study.sh`-ის გამოყენების ინსტრუქციის სანახავად გაუშვით `-h/--help` არგუმენტით.  
-მაგ: `./build-study.sh singular substitutions.conf -h`
+Start frontend app. Run below command from `ddp-angular/ddp-workspace` folder
+
+```
+ng serve <study_project_folder> -o
+
+Eg: ng serve ddp-singular -o
+```
+
+### Testing
+
+After creating PR run below command from `ddp-angular/build-utils` folder to start automated tests
+
+```
+./run_ci.sh run-tests <study_key> <branch> dev
+```
+
+## Backend
+
+### Startup
+
+To compile and run study run below command from `scripts-ddp` folder
+
+```
+./build-study.sh <study_key> <substitutions_file> --all
+
+Eg: ./build-study.sh singular substitutions.conf --all
+```
+
+Other available commands:
+
+```
+./build-study.sh <study_key> <substitutions_file> --build-pepper
+./build-study.sh <study_key> <substitutions_file> --build-study
+./build-study.sh <study_key> <substitutions_file> --run-pepper
+```
+
+### Testing
+
+After creating PR run this command from `ddp-study-server/pepper-apis/scripts` folder to start automated testing
+
+```
+./run_ci_tests.sh <your_branch_name>
+```

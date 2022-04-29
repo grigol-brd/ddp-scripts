@@ -2,13 +2,14 @@
 
 
 # set these absolute path directories according to locations on your machine
+#
 export STUDY_SERVER_DIR="D:\developer\broad\ddp-study-server"
 export ANGULAR_DIR="D:\developer\broad\ddp-angular"
 export SCRIPTS_DIR="D:\developer\broad\scripts-ddp"
-# ==============================
-
-
-
+#
+# ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^
+# | | | | | | | | | | | | | | | | | | | | | | | |
+# | | | | | | | | | | | | | | | | | | | | | | | |
 
 
 export STUDY_KEY=$1
