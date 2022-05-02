@@ -53,3 +53,5 @@ while getopts "c:g:" arg; do
             ;;
     esac
 done
+
+echo "Setup complete"

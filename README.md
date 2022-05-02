@@ -4,7 +4,12 @@ To setup tokens and log into vault run below command from `scripts-ddp` folder.
 **Ask teammates for the tokens**
 
 ```
-./setup.sh -c <circle_ci_token> -g <github_personal_access_token>
+./setup.sh [OPTIONS]
+
+OPTIONS:    -c <circle_ci_token>
+            -g <github_personal_access_token>
+
+Eg: ./setup.sh -c <circle_ci_token> -g <github_personal_access_token>
 ```
 
 ## Frontend
