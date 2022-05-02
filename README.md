@@ -12,6 +12,8 @@ OPTIONS:    -c <circle_ci_token>
 Eg: ./setup.sh -c <circle_ci_token> -g <github_personal_access_token>
 ```
 
+**Reload any open terminals or open new ones to reflect applied changes.**
+
 ## Frontend
 
 ### Startup
