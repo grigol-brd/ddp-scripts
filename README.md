@@ -1,26 +1,26 @@
 ## Setup
 
-Open [env.sh](./env.sh) file and update `DIR` variables paths relative to your machine.
+1. Open [env.sh](./env.sh) file and update `DIR` variables paths relative to your machine.
 
-To setup tokens and log in into vault run below command from `scripts-ddp` folder.  
-**Ask your teammates for the tokens**.
+2. To setup tokens and log in into vault run below command from `scripts-ddp` folder.  
+   **Ask your teammates for the tokens**.
 
-```
-./setup.sh [OPTIONS]
+   ```
+   ./setup.sh [OPTIONS]
 
-OPTIONS:    -c <circle_ci_token>
-            -g <github_personal_access_token>
+   OPTIONS:    -c <circle_ci_token>
+               -g <github_personal_access_token>
 
-Eg: ./setup.sh -c <circle_ci_token> -g <github_personal_access_token>
-```
+   Eg: ./setup.sh -c <circle_ci_token> -g <github_personal_access_token>
+   ```
 
-**Reload any open terminals or open new ones to reflect applied changes.**
+**Reload any open terminals or IDE to reflect applied changes after setup.**
 
 ## Frontend
 
-### Startup
+### Start up
 
-**Find study [keys here](https://github.com/broadinstitute/ddp-angular/blob/develop/.circleci/config.yml#L14) and [guids here](https://github.com/broadinstitute/ddp-angular/blob/develop/.circleci/config.yml#L16)**
+**Find study 👉 [KEYs here](https://github.com/broadinstitute/ddp-angular/blob/develop/.circleci/config.yml#L14) and [GUIDs here](https://github.com/broadinstitute/ddp-angular/blob/develop/.circleci/config.yml#L16)** 👈
 
 Generate frontend study config. Run this from `scripts-ddp` folder
 
@@ -52,7 +52,24 @@ After creating PR run below command from `ddp-angular/build-utils` folder to sta
 
 ## Backend
 
-### Startup
+### Prerequisites
+
+You need to have docker containers running before you start the server.  
+Start the containers by running given command from `scripts-ddp` folder:
+
+```
+docker-compose up -d
+```
+
+Make sure the containers are running. Check Docker Desktop or run the command below.
+
+You should see `mysql` and `redis` in the list.
+
+```
+docker ps
+```
+
+### Start up
 
 To compile and run study run below command from `scripts-ddp` folder
 

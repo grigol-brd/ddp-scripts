@@ -9,24 +9,34 @@ GITHUB_TOKEN_FILE=~/.github-token
 CI_TOKEN_FILE=~/.circleci-token
 
 
-if [[ ! -f $BASH_PRFILE ]]; then
-    echo 'craeted file'
-    touch $BASH_PRFILE
-fi
+function setup_windows {
+    powershell ./setup-win.ps1
+}
 
-source $BASH_PRFILE
 
-if [[ -z $VAULT_ADDR ]]; then
-    echo "export VAULT_ADDR=https://clotho.broadinstitute.org:8200" >> $BASH_PRFILE
-    echo "Set VAULT_ADDR"
-fi
+function setup_unix {
+    if [[ -z $VAULT_ADDR ]]; then
+        echo "export VAULT_ADDR=https://clotho.broadinstitute.org:8200" >> $BASH_PRFILE
+        echo "Set VAULT_ADDR"
+    fi
 
-if [[ -z $GOOGLE_APPLICATION_CREDENTIALS ]]; then
-    echo "export GOOGLE_APPLICATION_CREDENTIALS=./output-build-config/housekeeping-service-account.json" >> $BASH_PRFILE
-    echo "Set GOOGLE_APPLICATION_CREDENTIALS"
-fi
+    if [[ -z $GOOGLE_APPLICATION_CREDENTIALS ]]; then
+        echo "export GOOGLE_APPLICATION_CREDENTIALS=./output-build-config/housekeeping-service-account.json" >> $BASH_PRFILE
+        echo "Set GOOGLE_APPLICATION_CREDENTIALS"
+    fi
+}
 
-source $BASH_PRFILE
+
+case $(uname -o | tr '[:upper:]' '[:lower:]') in
+    msys*)
+        echo "Configuring for Windows"
+        setup_windows
+        ;;
+    *)
+        echo "Configuring for Unix"
+        setup_unix
+        ;;
+esac
 
 
 while getopts "c:g:" arg; do
@@ -49,7 +59,7 @@ while getopts "c:g:" arg; do
 
             echo $OPTARG >> $GITHUB_TOKEN_FILE
 
-            vault login -method=github token=$(cat $GITHUB_TOKEN_FILE)
+            vault login -method=github -address=https://clotho.broadinstitute.org:8200 token=$(cat $GITHUB_TOKEN_FILE)
             ;;
     esac
 done
