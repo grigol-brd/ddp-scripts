@@ -6,7 +6,8 @@ set -e
 STUDY=$1
 STUDY_GUID=${2:-$STUDY}
 
-. ./env.sh $STUDY
+# load env variables
+source ./env.sh $STUDY
 
 if [[ -z $STUDY ]]; then
   echo "Error: No study key provided"
@@ -22,4 +23,4 @@ fi
 cd $ANGULAR_DIR
 ./build-study.sh v1 dev . $STUDY $STUDY_GUID --config
 
-$SCRIPTS_DIR/configure-client.sh
+$SCRIPTS_DIR/lib/configure-client.sh

@@ -10,11 +10,15 @@ CI_TOKEN_FILE=~/.circleci-token
 
 
 function setup_windows {
-    powershell ./setup-win.ps1
+    echo "Configuring for Windows"
+
+    powershell ./lib/setup-win.ps1
 }
 
 
 function setup_unix {
+    echo "Configuring for Unix"
+
     if [[ -z $VAULT_ADDR ]]; then
         echo "export VAULT_ADDR=https://clotho.broadinstitute.org:8200" >> $BASH_PRFILE
         echo "Set VAULT_ADDR"
@@ -29,11 +33,9 @@ function setup_unix {
 
 case $(uname -o | tr '[:upper:]' '[:lower:]') in
     msys*)
-        echo "Configuring for Windows"
         setup_windows
         ;;
     *)
-        echo "Configuring for Unix"
         setup_unix
         ;;
 esac

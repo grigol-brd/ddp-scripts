@@ -1,6 +1,6 @@
 ## Setup
 
-1. Open [env.sh](./env.sh) file and update `DIR` variables paths relative to your machine.
+1. Open [env.sh](./env.sh) file and update `DIR` variables relative to your machine.
 
 2. To setup tokens and log in into vault run below command from `scripts-ddp` folder.  
    **Ask your teammates for the tokens**.

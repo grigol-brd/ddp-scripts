@@ -128,7 +128,7 @@ function main {
 
 
 function clean_db {
-  cd $SCRIPTS_DIR
+  cd $SCRIPTS_DIR/lib
 
   ./empty-database.sh || true # '||true' ignores error's if command fails
 
@@ -216,7 +216,7 @@ function render_pepper_config {
 
   ./api-build.sh v1 dev . --config
 
-  $SCRIPTS_DIR/configure-pepper.sh
+  $SCRIPTS_DIR/lib/configure-pepper.sh
 }
 
 
@@ -225,7 +225,7 @@ function render_study_config {
 
   ./render.sh v1 dev $STUDY
 
-  $SCRIPTS_DIR/configure-study-builder.sh
+  $SCRIPTS_DIR/lib/configure-study-builder.sh
 }
 
 
