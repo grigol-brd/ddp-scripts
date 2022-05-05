@@ -13,7 +13,7 @@ export SCRIPTS_DIR="D:\developer\broad\scripts-ddp"
 
 
 if [[ ! -d $STUDY_SERVER_DIR || ! -d $ANGULAR_DIR || ! -d $SCRIPTS_DIR ]]; then
-  echo "Please update directory paths in 'env.sh' file" | GREP_COLOR="01;31" grep . --color=always
+  echo "Please make sure directory paths are correct in 'env.sh' file" | GREP_COLOR="01;31" grep . --color=always
   exit 1
 fi
 
