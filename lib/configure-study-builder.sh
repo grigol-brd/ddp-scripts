@@ -4,7 +4,7 @@
 DB_PASS="pass"
 DB_URL="jdbc:mysql://127.0.0.1:3306/pepperlocal?user=root\&password=${DB_PASS}\&useSSL=false\&allowPublicKeyRetrieval=true\&serverTimezone=Europe/Moscow\&sessionVariables=innodb_strict_mode=on,sql_mode='TRADITIONAL'"
 
-FILE_TO_UPDATE="${STUDY_BUILDER_CONFIGS_DIR}/output-config/application.conf"
+FILE_TO_UPDATE="${STUDY_BUILDER_CLI_DIR}/output-config/application.conf"
 
 sed -i "s|\"dbUrl\":.*|\"dbUrl\": \"${DB_URL}\",|g" ${FILE_TO_UPDATE}
 
@@ -40,10 +40,10 @@ fi
 
 # update vars.conf
 if [[ $STUDY_KEY == 'basil' ]]; then
-    mv "${STUDY_BUILDER_CONFIGS_DIR}/output-config/basil-vars.conf" "${STUDY_BUILDER_CONFIGS_DIR}/output-config/vars.conf"
+    mv "${STUDY_BUILDER_CLI_DIR}/output-config/basil-vars.conf" "${STUDY_BUILDER_CLI_DIR}/output-config/vars.conf"
 fi
 
-FILE_TO_UPDATE="${STUDY_BUILDER_CONFIGS_DIR}/output-config/vars.conf"
+FILE_TO_UPDATE="${STUDY_BUILDER_CLI_DIR}/output-config/vars.conf"
 
 if [[ $STUDY_KEY == 'basil' ]]; then
     sed -i "s|\"appClientId\":.*|\"appClientId\": \"${CLIENT_ID}\",|g" ${FILE_TO_UPDATE}

@@ -12,6 +12,12 @@ export SCRIPTS_DIR="D:\developer\broad\scripts-ddp"
 # | | | | | | | | | | | | | | | | | | | | | | | |
 
 
+if [[ ! -d $STUDY_SERVER_DIR || ! -d $ANGULAR_DIR || ! -d $SCRIPTS_DIR ]]; then
+  echo "Please update directory paths in 'env.sh' file" | GREP_COLOR="01;31" grep . --color=always
+  exit 1
+fi
+
+
 export STUDY_KEY=$1
 
 if [[ -z $STUDY_KEY ]]; then
@@ -20,7 +26,6 @@ if [[ -z $STUDY_KEY ]]; then
 fi
 
 
-export STUDY_BUILDER_CONFIGS_DIR="${STUDY_SERVER_DIR}/study-builder"
 export PEPPER_APIS_DIR="${STUDY_SERVER_DIR}/pepper-apis"
 export STUDY_BUILDER_CLI_DIR="${PEPPER_APIS_DIR}/studybuilder-cli"
 

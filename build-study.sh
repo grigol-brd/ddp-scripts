@@ -198,14 +198,14 @@ function run_pepper {
 
 
 function invalidate_study {
-  cd $STUDY_BUILDER_CONFIGS_DIR
+  cd $STUDY_BUILDER_CLI_DIR
 
   $RUN_STUDY_BUILDER_INVALIDATE_CMD
 }
 
 
 function run_study {
-  cd $STUDY_BUILDER_CONFIGS_DIR
+  cd $STUDY_BUILDER_CLI_DIR
 
   $RUN_STUDY_BUILDER_CMD | prefix_logs 'Study Builder'
 }
@@ -221,7 +221,7 @@ function render_pepper_config {
 
 
 function render_study_config {
-  cd $STUDY_BUILDER_CONFIGS_DIR
+  cd $STUDY_BUILDER_CLI_DIR
 
   ./render.sh v1 dev $STUDY
 
@@ -248,7 +248,7 @@ function build_osteo_old {
 function run_patch_osteo_v2 {
   compile_study
 
-  cd $STUDY_BUILDER_CONFIGS_DIR
+  cd $STUDY_BUILDER_CLI_DIR
 
   TASK='OsteoV2Updates'
   RUN_PATCH_CMD="${RUN_STUDY_BUILDER_CMD} --run-task ${TASK}"
