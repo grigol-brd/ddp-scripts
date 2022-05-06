@@ -31,6 +31,7 @@ export STUDY_BUILDER_CLI_DIR="${PEPPER_APIS_DIR}/studybuilder-cli"
 
 
 export CLIENT_ID="D1TNXhZChtMSUTGVFs1C2ow2kFGfMJrL"
-export CLIENT_SECRET="lP34E6Br7x-CAt3D8HcVKRl4kvR6yn5xgnrByd0TUKf5jaltFkDSMyr_rZF5RXpr"
+export CLIENT_SECRET="75YX_LMk5SAvJSXYJd6z7HWFOE8s9FH3BVIfgvKNViPI2YOwDHdTCHAbhGbzo-D3"
 
+# trailing slash is a MUST! it won't be appended automatically by the pepper
 export AUTH0_DOMAIN="https://ddp-dev.auth0.com/"

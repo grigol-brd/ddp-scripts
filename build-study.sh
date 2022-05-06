@@ -4,7 +4,7 @@
 set -e
 
 function main {
-  UNUSED_OPTIONS=()
+  COMMAND_SPECIFIC_OPTIONS=()
 
   # colors
   RED=31; GREEN=32; YELLOW=33;
@@ -118,7 +118,7 @@ function main {
         ;;
       *)
         unknown_option_warn $1
-        UNUSED_OPTIONS+=("$1")
+        COMMAND_SPECIFIC_OPTIONS+=("$1")
         ;;
     esac
     shift
@@ -232,11 +232,11 @@ function render_study_config {
 function build_osteo_old {
   clean_db
 
-  if [[ ! -f "${PEPPER_APIS_DIR}/${PEPPER_JAR_FILE_PARTH}" || "${UNUSED_OPTIONS[@]}" != *'--skip-pepper-compile'* ]]; then
-    build_pepper
-  else
+  if [[ "${COMMAND_SPECIFIC_OPTIONS[@]}" == *'--skip-pepper-compile'* ]]; then
     render_pepper_config
     init_pepper
+  else
+    build_pepper
   fi
 
   build_study
