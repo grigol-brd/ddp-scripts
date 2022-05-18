@@ -95,6 +95,14 @@ After creating PR run below command from `ddp-angular/build-utils` folder to sta
 ./run_ci.sh run-tests <study_key> <branch> dev
 ```
 
+## Deployment
+
+When a pull request is merged to `develop` deployment is automatically triggered and that should be sufficient in most cases. However, if you happen to need to deploy specific branch to dev environment you can do so by running the following script from `ddp-angular/build-utils` folder
+
+```
+./startbuilddeploy.sh <study_key> <branch>
+```
+
 <br/>
 
 # Backend Development
