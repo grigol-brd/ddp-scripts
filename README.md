@@ -1,3 +1,11 @@
+# Docs
+
+You can find study configuration example with explanations [here](https://github.com/broadinstitute/ddp-study-server/blob/626d9c2f4f7e2979182f7ac3a7ea8eea5a08567c/pepper-apis/studybuilder-cli/studies/study-example.conf).
+
+To learn how study `Activity` and its parts work read guide [here](https://broadinstitute.atlassian.net/wiki/spaces/DDP/pages/1344995771/Activity+Guide).
+
+<br/>
+
 # Requirements
 
 You'll need to download a few things to get local development up and running.
