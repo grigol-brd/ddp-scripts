@@ -38,7 +38,10 @@ function main {
 
   RUN_STUDY_BUILDER_CMD="java -Dconfig.file=./output-config/application.conf -jar ${STUDY_BUILDER_CLI_DIR}/target/StudyBuilder.jar --vars ./output-config/vars.conf ./studies/${STUDY}/study.conf --substitutions ./studies/${STUDY}/${SUBS}"
   if [[ $STUDY_KEY == 'basil' ]]; then
-    RUN_STUDY_BUILDER_CMD="${RUN_STUDY_BUILDER_CMD} --process-translations PROCESS_IGNORE_TEMPLATES_WITH_TRANSLATIONS"
+    RUN_STUDY_BUILDER_CMD="${RUN_STUDY_BUILDER_CMD} --process-translations PROCESS_IGNORE_TEMPLATES_WITH_TRANSLATIONS" # https://broadinstitute.atlassian.net/wiki/spaces/DDP/pages/2988769312/Translations+processing#Translation-references-auto-resolving
+  fi
+  if [[ $STUDY_KEY == 'esc' || $STUDY_KEY == 'mpc' ]]; then
+    RUN_STUDY_BUILDER_CMD="${RUN_STUDY_BUILDER_CMD} --i18n-path ./studies/${STUDY}/i18n" # https://broadinstitute.atlassian.net/wiki/spaces/DDP/pages/2988769312/Translations+processing#Translation-references-auto-resolving
   fi
 
   RUN_STUDY_BUILDER_INVALIDATE_CMD="${RUN_STUDY_BUILDER_CMD} --invalidate"
