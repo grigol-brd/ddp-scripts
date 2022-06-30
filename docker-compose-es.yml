@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  elasticsearch:
+    image: elasticsearch:8.2.3
+    container_name: broad_elastic
+    environment:
+      - discovery.type=single-node
+      - ELASTICSEARCH_USERNAME=elastic
+      - ELASTIC_PASSWORD=111111
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1      
+    volumes:
+      - ../elastic_data:/usr/share/elasticsearch/data
+    ports:
+      - '9200:9200'
+      - '9300:9300'
+    networks:
+      - elastic
+    labels:
+      - co.elastic.logs/module=elasticsearch
+      - co.elastic.metrics/module=elasticsearch
+volumes:
+  broad-volume: null
+
+networks:
+  elastic:
+    driver: bridge
+
