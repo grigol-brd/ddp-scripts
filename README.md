@@ -69,6 +69,12 @@ You should see `mysql` and `redis` in the list.
 docker ps
 ```
 
+After connection to database instance via localhost:3306  you shuld see two databases: pepperlocal and housekeepinglocal.
+
+To install elastic serach, run setup-docker-es.sh.
+Response should include "cretaed":"true" messages.
+Oterwise run setup-docker-es.sh again.
+
 ### Start up
 
 To compile and run study run below command from `scripts-ddp` folder

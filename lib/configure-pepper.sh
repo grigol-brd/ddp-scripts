@@ -7,6 +7,7 @@ HOUSEKEEPING_DB_URL="jdbc:mysql://127.0.0.1:3306/housekeepinglocal?user=root\&pa
 CACHE_FILE_PATH="./output-config/redisson-jcache.yaml"
 REDIS_URL="redis://localhost:6379"
 PROXY_URL="http://gae-egress-proxy-dev101.c.broad-ddp-dev.internal:3128"
+ELASTIC_SEARCH_PROXY_URL="http://localhost:9200"
 
 FILE_TO_UPDATE="${PEPPER_APIS_DIR}/output-config/application.conf"
 
@@ -18,6 +19,7 @@ sed -i "s|\"ipAllowList\":.*|\"ipAllowList\": [\"0.0.0.0\", \"127.0.0.1\",|g" ${
 sed -i "s|\"jcacheConfigurationFile\":.*|\"jcacheConfigurationFile\": \"${CACHE_FILE_PATH}\",|g" ${FILE_TO_UPDATE}
 sed -i "s|\"redisServerAddress\":.*|\"redisServerAddress\": \"${REDIS_URL}\",|g" ${FILE_TO_UPDATE}
 sed -i "s|\"proxy\":.*|\/\/\"proxy\": \"${PROXY_URL}\",|g" ${FILE_TO_UPDATE}
+sed -i "s|\"elasticsearchProxy\":.*|\"elasticsearchProxy\": \"${ELASTIC_SEARCH_PROXY_URL}\",|g" ${FILE_TO_UPDATE}
 
 #study-vm-dev
 #10.128.15.228

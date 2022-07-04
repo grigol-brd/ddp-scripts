@@ -88,14 +88,21 @@ function main {
         ;;
       --all)
         clean_db
-        build_pepper
-        build_study
+        build_all
+        # build_pepper
+        # build_study
+        run_study
         run_pepper
         ;;
       --all-no-db)
-        build_pepper
-        build_study
+        build_all
+        # build_pepper
+        # build_study
+        run_study
         run_pepper
+        ;;
+      --build-all)
+        build_all
         ;;
       --all-no-build)
         clean_db
@@ -146,7 +153,21 @@ function build_pepper {
 function build_study {
   render_study_config
   compile_study
-  run_study
+}
+
+function build_all {
+  # render_pepper_config
+  # compile_pepper
+  # init_pepper
+
+  # render_study_config
+  # compile_study
+
+
+  render_pepper_config
+  render_study_config
+  compile_all
+  init_pepper
 }
 
 
@@ -161,6 +182,12 @@ function compile_study {
   cd $PEPPER_APIS_DIR
 
   mvn -DskipTests clean install -pl studybuilder-cli -am
+}
+
+function compile_all {
+  cd $PEPPER_APIS_DIR
+
+  mvn -DskipTests clean install -pl :dss-server,:studybuilder-cli -am
 }
 
 # when running pepper for the first time it needs to do db migration before we run study builder
@@ -240,6 +267,7 @@ function build_osteo_old {
   fi
 
   build_study
+  run_study
 
   run_pepper
 }
