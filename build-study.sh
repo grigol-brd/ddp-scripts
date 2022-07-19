@@ -124,7 +124,7 @@ function main {
         run_study
         run_pepper
         ;;
-      -qrc|--all-quick-compile)
+      -qrc|--all-quick-render-compile)
         render_pepper_config
         render_study_config
         compile_all
