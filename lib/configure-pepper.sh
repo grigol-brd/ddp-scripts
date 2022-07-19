@@ -8,6 +8,7 @@ CACHE_FILE_PATH="./output-config/redisson-jcache.yaml"
 REDIS_URL="redis://localhost:6379"
 PROXY_URL="http://gae-egress-proxy-dev101.c.broad-ddp-dev.internal:3128"
 ELASTIC_SEARCH_PROXY_URL="http://localhost:9200"
+ELASTIC_SEARCH_URL="http://localhost:9200"
 
 FILE_TO_UPDATE="${PEPPER_APIS_DIR}/output-config/application.conf"
 
@@ -20,6 +21,9 @@ sed -i "s|\"jcacheConfigurationFile\":.*|\"jcacheConfigurationFile\": \"${CACHE_
 sed -i "s|\"redisServerAddress\":.*|\"redisServerAddress\": \"${REDIS_URL}\",|g" ${FILE_TO_UPDATE}
 sed -i "s|\"proxy\":.*|\/\/\"proxy\": \"${PROXY_URL}\",|g" ${FILE_TO_UPDATE}
 sed -i "s|\"elasticsearchProxy\":.*|\"elasticsearchProxy\": \"${ELASTIC_SEARCH_PROXY_URL}\",|g" ${FILE_TO_UPDATE}
+sed -i "s|\"elasticsearchUrl\":.*|\"elasticsearchUrl\": \"${ELASTIC_SEARCH_URL}\",|g" ${FILE_TO_UPDATE}
+sed -i "s|\"usePubSubEmulator\":.*|\"usePubSubEmulator\": true,|g" ${FILE_TO_UPDATE}
+
 
 #study-vm-dev
 #10.128.15.228

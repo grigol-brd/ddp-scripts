@@ -1,5 +1,6 @@
 # create databases
 CREATE DATABASE IF NOT EXISTS `pepperlocal`;
+CREATE DATABASE IF NOT EXISTS `dsmlocal`;
 CREATE DATABASE IF NOT EXISTS `housekeepinglocal`;
 
 # create root user and grant rights

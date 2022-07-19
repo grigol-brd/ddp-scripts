@@ -40,6 +40,9 @@ function main {
   if [[ $STUDY_KEY == 'basil' ]]; then
     RUN_STUDY_BUILDER_CMD="${RUN_STUDY_BUILDER_CMD} --process-translations PROCESS_IGNORE_TEMPLATES_WITH_TRANSLATIONS"
   fi
+  if [[ $STUDY_KEY == 'fon' ]]; then
+    RUN_STUDY_BUILDER_CMD="${RUN_STUDY_BUILDER_CMD}  --process-translations PROCESS_IGNORE_TEMPLATES_WITH_TRANSLATIONS --translations-to-db-json"
+  fi
 
   RUN_STUDY_BUILDER_INVALIDATE_CMD="${RUN_STUDY_BUILDER_CMD} --invalidate"
 
@@ -89,15 +92,11 @@ function main {
       --all)
         clean_db
         build_all
-        # build_pepper
-        # build_study
         run_study
         run_pepper
         ;;
       --all-no-db)
         build_all
-        # build_pepper
-        # build_study
         run_study
         run_pepper
         ;;
@@ -107,13 +106,30 @@ function main {
       --all-no-build)
         clean_db
         render_pepper_config
-        init_pepper
         render_study_config
+        init_pepper
         run_study
         run_pepper
         ;;
       -q|--all-quick)
         invalidate_study
+        init_pepper
+        run_study
+        run_pepper
+        ;;
+      -qc|--all-quick-compile)
+        compile_all
+        invalidate_study
+        init_pepper
+        run_study
+        run_pepper
+        ;;
+      -qrc|--all-quick-compile)
+        render_pepper_config
+        render_study_config
+        compile_all
+        invalidate_study
+        init_pepper
         run_study
         run_pepper
         ;;
@@ -156,14 +172,6 @@ function build_study {
 }
 
 function build_all {
-  # render_pepper_config
-  # compile_pepper
-  # init_pepper
-
-  # render_study_config
-  # compile_study
-
-
   render_pepper_config
   render_study_config
   compile_all
