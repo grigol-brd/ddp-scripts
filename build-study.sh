@@ -73,6 +73,9 @@ function main {
       -cs|--compile-study)
         compile_study
         ;;
+      -cs|--compile-all)
+        compile_all
+        ;;
       -rs|--run-study)
         run_study
         ;;
